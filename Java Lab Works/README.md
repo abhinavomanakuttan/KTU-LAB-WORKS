@@ -5,3 +5,7 @@
 <hr>
 
 Exp No 1 : [Palindrome](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Palindrome.java)
+
+<br>
+
+Exp No 3 :[Frequency of the string](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Frequency.java)
