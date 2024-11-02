@@ -16,12 +16,16 @@ Exp No 3 : [Matrix_Multiplication](https://github.com/abhinavomanakuttan/KTU-LAB
 
 <br>
 
-Exp No 4 :[Method_Overoading](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Method_OveroadingExp1.java)
+Exp No 4 : [Method_Overoading](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Method_OveroadingExp1.java)
 
 <br>
 
-Exp No 4 :[Inheritance](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Inheritance.java)
+Exp No 4 : [Inheritance](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Inheritance.java)
 
 <br>
 
-Exp No 5 :[Abstract class](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Abstract_class.java)
+Exp No 5 : [Abstract class](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Abstract_class.java)
+
+<br>
+
+Exp No 6 : [Usage of Super and Overriding ](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Usage_of_Super_and_Overriding.java)
