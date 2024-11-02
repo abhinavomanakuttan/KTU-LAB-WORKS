@@ -13,3 +13,7 @@ Exp No 2 : [Frequency of the string](https://github.com/abhinavomanakuttan/KTU-L
 <br>
 
 Exp No 3 : [Matrix_Multiplication](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Matrix_Multiplication.java)
+
+<br>
+
+Exp No 4 :[Method_Overoading](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Method_OveroadingExp1.java)
