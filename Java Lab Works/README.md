@@ -21,3 +21,7 @@ Exp No 4 :[Method_Overoading](https://github.com/abhinavomanakuttan/KTU-LAB-WORK
 <br>
 
 Exp No 4 :[Inheritance](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Inheritance.java)
+
+<br>
+
+Exp No 5 :[Abstract class](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Abstract_class.java)
