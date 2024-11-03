@@ -61,3 +61,7 @@ Exp No 14 : [Multi-threading](https://github.com/abhinavomanakuttan/KTU-LAB-WORK
 <br>
 
 Exp No 15 : [Thread Synchronization](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Thread_Synchronization.java)
+
+<br>
+
+Exp No 16 : [GUI Calculator](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Calculator.java)
