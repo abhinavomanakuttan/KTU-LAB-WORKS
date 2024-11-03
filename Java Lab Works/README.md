@@ -57,3 +57,7 @@ Exp No 13 :[File_Exception_Handling](https://github.com/abhinavomanakuttan/KTU-L
 <br>
 
 Exp No 14 : [Multi-threading](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Exp14_Multi_threading.java)
+
+<br>
+
+Exp No 15 : [Thread Synchronization](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Thread_Synchronization.java)
