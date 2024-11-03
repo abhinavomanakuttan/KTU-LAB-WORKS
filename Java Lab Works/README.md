@@ -29,3 +29,8 @@ Exp No 5 : [Abstract class](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/
 <br>
 
 Exp No 6 : [Usage of Super and Overriding ](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Usage_of_Super_and_Overriding.java)
+
+<br>
+
+Exp No 7 : [Exception Handaling](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Exception_Handling.java) 
+
