@@ -67,10 +67,6 @@ class Manager extends Employee{
 
 }
 
-
-
-
-
 public class Inheritance {
     public static void main(String[] args) {
         officer f =new officer("Abhinav", 20, "12304455", "abcvfjb", 250000 , "B-tech");
