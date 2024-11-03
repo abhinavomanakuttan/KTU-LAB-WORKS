@@ -34,3 +34,7 @@ Exp No 6 : [Usage of Super and Overriding ](https://github.com/abhinavomanakutta
 
 Exp No 7 : [Exception Handaling](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Exception_Handling.java) 
 
+<br>
+
+Exp No 8 :[Custom Exception](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Custom_Exception.java)
+
