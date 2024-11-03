@@ -49,3 +49,11 @@ Exp No 11 : [String Tokenizer](https://github.com/abhinavomanakuttan/KTU-LAB-WOR
 <br>
 
 Exp No 12 :[File Reader /Writer](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/File%20Reader_Writer/File_Reader_Writer.java)
+
+<br>
+
+Exp No 13 :[File_Exception_Handling](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/File_Exception_Handling/File_Exception_Handling.java)
+
+<br>
+
+Exp No 14 : [Multi-threading](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Exp14_Multi_threading.java)
