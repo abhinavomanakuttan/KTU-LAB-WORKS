@@ -42,3 +42,7 @@ Exp No 9 : [Exception Handaling](https://github.com/abhinavomanakuttan/KTU-LAB-W
 
 Exp No 10 :[Custom Exception](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Custom_Exception.java)
 
+<br>
+
+Exp No 10 : [String Tokenizer](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/String_Tokenizer.java)
+
