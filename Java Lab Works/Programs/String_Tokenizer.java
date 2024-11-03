@@ -1,4 +1,9 @@
- 
+ /*
+Write a Java program that reads a line of integers, 
+and then displays each integer, and the sum of all 
+the integers (Use String Tokenizer class of 
+java.util). 
+  */ 
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
