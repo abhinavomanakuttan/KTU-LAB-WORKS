@@ -40,7 +40,7 @@ Exp No 9 : [Exception Handaling](https://github.com/abhinavomanakuttan/KTU-LAB-W
 
 <br>
 
-Exp No 10 :[Custom Exception](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Custom_Exception.java)
+Exp No 10 : [Custom Exception](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Custom_Exception.java)
 
 <br>
 
@@ -48,7 +48,7 @@ Exp No 11 : [String Tokenizer](https://github.com/abhinavomanakuttan/KTU-LAB-WOR
 
 <br>
 
-Exp No 12 :[File Reader /Writer](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/File%20Reader_Writer/File_Reader_Writer.java)
+Exp No 12 : [File Reader /Writer](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/File%20Reader_Writer/File_Reader_Writer.java)
 
 <br>
 
