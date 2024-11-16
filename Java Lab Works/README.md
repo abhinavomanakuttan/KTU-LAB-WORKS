@@ -71,3 +71,10 @@ Exp No 15 : [Thread Synchronization](https://github.com/abhinavomanakuttan/KTU-L
 <br>
 
 Exp No 16 : [GUI Calculator](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Calculator.java)
+
+<br>
+
+Exp No 17 : [GUI Traffic Light](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Traffic_Light.java)
+
+
+
