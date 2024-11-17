@@ -77,6 +77,3 @@ Exp No 16 : [GUI Calculator](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS
 Exp No 17 : [GUI Traffic Light](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/Traffic_Light.java)
 
 
-
-
-
