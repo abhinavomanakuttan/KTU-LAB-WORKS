@@ -47,7 +47,7 @@ Exp No 10 : [Custom Exception](https://github.com/abhinavomanakuttan/KTU-LAB-WOR
 Exp No 11 : [String Tokenizer](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works/Programs/String_Tokenizer.java)
 <br>
 
-    * Q11.1-> [String Tokenizer ( String )](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works%2FPrograms%2FString_Token%28string%29.java )
+  * Q11.1-> [String Tokenizer ( String )](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/Java%20Lab%20Works%2FPrograms%2FString_Token%28string%29.java )
 
 
 <br>
