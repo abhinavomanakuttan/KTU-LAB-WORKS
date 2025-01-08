@@ -8,8 +8,8 @@ Welcome to the **College Lab Work Repository**! 🚀 This repository contains al
 
 ## 🗂️ Table of Contents
 - [Java Lab](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/tree/main/Java%20Lab%20Works) 💻
-- [OS Lab](#os-lab) 🖥️
-- [Python Lab](#python-lab) 🐍
+- [OS Lab](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/tree/main/OS%20Lab) 🖥️
+- [Python Lab](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/tree/main/Python%20) 🐍
 - [Data Structure Lab](https://github.com/abhinavomanakuttan/Data-Structures-using-C) 🌲
 
 ---
