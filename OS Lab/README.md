@@ -43,18 +43,18 @@ To write programs that implement system-level concepts such as process control, 
 ### Programs  
 
 1. **Program to Implement `fork()`, `exec()`, `getpid()`, `exit()`**  
-   [Write a program that demonstrates the use of the following system calls:](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/OS%20Lab/PROGRAMS/fork_exec_getpid_exit.c)  
+   [Write a program that demonstrates the use of the following system calls:](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/OS%20Lab/PROGRAMS/program1.c)  
    - `fork()`: Creates a new process.
    - `exec()`: Replaces the current process with a new process.
    - `getpid()`: Returns the process ID of the calling process.
    - `exit()`: Terminates the calling process.
 
 2. **Program to Implement `stat()`**  
-   [Write a program that uses the `stat()` system call to retrieve and display the information of a specified file.](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/OS%20Lab/PROGRAMS/stat_example.c)  
+   [Write a program that uses the `stat()` system call to retrieve and display the information of a specified file.](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/OS%20Lab/PROGRAMS/program2.c)  
    - The program should display the file size, permissions, last modification time, etc.
 
 3. **Program to Implement `opendir()`, `readdir()`, `closedir()`**  
-   [Write a program that opens a directory, reads its contents, and then closes the directory using the following system calls:](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/OS%20Lab/PROGRAMS/directory_operations.c)  
+   [Write a program that opens a directory, reads its contents, and then closes the directory using the following system calls:](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/OS%20Lab/PROGRAMS/program3.c)  
    - `opendir()`: Opens a directory stream.
    - `readdir()`: Reads a directory entry.
    - `closedir()`: Closes the directory stream.
