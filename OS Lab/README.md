@@ -1,4 +1,4 @@
-# Operating Systems Lab  
+ # Operating Systems Lab  
 
 ## Experiment No: 2  
 
@@ -33,17 +33,44 @@ To write simple shell programs demonstrating basic functions, loops, and pattern
 7. **Program to Implement a Simple Calculator**  
    [Write a program to perform basic arithmetic operations (addition, subtraction, multiplication, division) based on user input. ](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/OS%20Lab/PROGRAMS/simple_calculator.sh) 
 
+---
+
+## Experiment No: 3
+
+### Objective  
+To write programs that implement system-level concepts such as process control, file handling, and directory operations.
+
+### Programs  
+
+1. **Program to Implement `fork()`, `exec()`, `getpid()`, `exit()`**  
+   [Write a program that demonstrates the use of the following system calls:](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/OS%20Lab/PROGRAMS/fork_exec_getpid_exit.c)  
+   - `fork()`: Creates a new process.
+   - `exec()`: Replaces the current process with a new process.
+   - `getpid()`: Returns the process ID of the calling process.
+   - `exit()`: Terminates the calling process.
+
+2. **Program to Implement `stat()`**  
+   [Write a program that uses the `stat()` system call to retrieve and display the information of a specified file.](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/OS%20Lab/PROGRAMS/stat_example.c)  
+   - The program should display the file size, permissions, last modification time, etc.
+
+3. **Program to Implement `opendir()`, `readdir()`, `closedir()`**  
+   [Write a program that opens a directory, reads its contents, and then closes the directory using the following system calls:](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/OS%20Lab/PROGRAMS/directory_operations.c)  
+   - `opendir()`: Opens a directory stream.
+   - `readdir()`: Reads a directory entry.
+   - `closedir()`: Closes the directory stream.
+
+---
+
 ### Instructions  
 - Ensure proper use of shell scripting conventions.  
-- Test each program thoroughly to validate functionality.  
+- For C programs in Experiment 3, compile and run them on a Linux environment to test functionality.  
 - Document inputs and outputs for each program.  
 
 ### Tools Used  
 - Shell Scripting  
+- C Programming  
 
 ### Notes  
-- Use comments within the scripts to explain the logic and flow of each program.  
+- Use comments within the scripts and C code to explain the logic and flow of each program.  
 - Follow best practices for writing readable and maintainable code.  
-
----  
 
