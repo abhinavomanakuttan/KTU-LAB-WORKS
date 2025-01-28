@@ -61,6 +61,28 @@ To write programs that implement system-level concepts such as process control, 
 
 ---
 
+---
+
+## Experiment No: 4
+
+### AIM  
+To perform file I/O using system calls in Linux such as creating, opening, reading, writing, and closing files using low-level system calls.
+
+### Programs  
+
+1. **Creating a New File**  
+   [Write a program to create a new file using system calls in Linux.] ()
+
+2. **Program to Create, Open, Write, and Read a File**  
+   [Write a program that performs the following operations:]  ()
+   - Creates a new file (if it doesn't exist).
+   - Opens the file for writing and reading.
+   - Writes some data into the file.
+   - Reads and displays the data from the file.
+  
+---
+
+
 ### Instructions  
 - Ensure proper use of shell scripting conventions.  
 - For C programs in Experiment 3, compile and run them on a Linux environment to test functionality.  
