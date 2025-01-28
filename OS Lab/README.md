@@ -71,10 +71,10 @@ To perform file I/O using system calls in Linux such as creating, opening, readi
 ### Programs  
 
 1. **Creating a New File**  
-   [Write a program to create a new file using system calls in Linux.] ()
+   [Write a program to create a new file using system calls in Linux.](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/OS%20Lab/PROGRAMS/Exp4.c)
 
 2. **Program to Create, Open, Write, and Read a File**  
-   [Write a program that performs the following operations:]  ()
+   [Write a program that performs the following operations:](https://github.com/abhinavomanakuttan/KTU-LAB-WORKS/blob/main/OS%20Lab/PROGRAMS/Exp4b.c)
    - Creates a new file (if it doesn't exist).
    - Opens the file for writing and reading.
    - Writes some data into the file.
