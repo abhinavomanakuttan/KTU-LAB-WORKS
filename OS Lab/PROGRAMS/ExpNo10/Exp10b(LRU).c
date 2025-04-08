@@ -1,80 +1,64 @@
 #include <stdio.h>
-#define MAX_FRAMES 10
-#define MAX_REFERENCES 25
+#define MAX_FRAMES 3
+#define MAX_REFERENCES 20
 
 int main() {
-    int page_references[MAX_REFERENCES], frames[MAX_FRAMES], last_used[MAX_FRAMES];
-    int n, f, page_faults = 0, time_counter = 1;
+    int pages[MAX_REFERENCES], frames[MAX_FRAMES], last_used[MAX_FRAMES] = {0};
+    int n, f, faults = 0, time = 1;
 
-    // Input: Number of page references
-    printf("Enter the number of page references: ");
+    // Get input
+    printf("Enter number of page references: ");
     scanf("%d", &n);
-
-    // Input: Page reference sequence
-    printf("Enter the page references: ");
-    for (int i = 0; i < n; i++) {
-        scanf("%d", &page_references[i]);
+    
+    printf("Enter page references: ");
+    for(int i=0; i<n; i++) {
+        scanf("%d", &pages[i]);
     }
 
-    // Input: Number of frames
-    printf("Enter the number of frames: ");
+    printf("Enter number of frames: ");
     scanf("%d", &f);
 
-    // Initialize frames and last_used counters
-    for (int i = 0; i < f; i++) {
-        frames[i] = -1;       // -1 indicates empty frame
-        last_used[i] = 0;     // Initialize usage timestamps
+    // Initialize frames as empty (-1)
+    for(int i=0; i<f; i++) {
+        frames[i] = -1;
     }
 
-    printf("\nLRU Page Replacement Algorithm\n");
-    printf("Page\tFrames\t\tPage Fault\n");
+    printf("\nPage\tFrames\tFault\n");
 
-    for (int i = 0; i < n; i++) {
-        int current_page = page_references[i];
-        int page_found = 0;
+    for(int i=0; i<n; i++) {
+        int page = pages[i];
+        int found = 0;
 
-        // Check if page is already in a frame
-        for (int j = 0; j < f; j++) {
-            if (frames[j] == current_page) {
-                page_found = 1;
-                last_used[j] = time_counter++;
+        // Check if page is already in frames
+        for(int j=0; j<f; j++) {
+            if(frames[j] == page) {
+                found = 1;
+                last_used[j] = time++;
                 break;
             }
         }
 
-        // Page fault handling
-        if (!page_found) {
-            int lru_index = 0;
-            
-            // Find the least recently used frame
-            for (int j = 1; j < f; j++) {
-                if (last_used[j] < last_used[lru_index]) {
-                    lru_index = j;
+        // If page not found, replace LRU page
+        if(!found) {
+            int lru = 0;
+            for(int j=1; j<f; j++) {
+                if(last_used[j] < last_used[lru]) {
+                    lru = j;
                 }
             }
-
-            // Replace the LRU page
-            frames[lru_index] = current_page;
-            last_used[lru_index] = time_counter++;
-            page_faults++;
+            frames[lru] = page;
+            last_used[lru] = time++;
+            faults++;
         }
 
         // Display current state
-        printf("%d\t", current_page);
-        for (int j = 0; j < f; j++) {
-            if (frames[j] == -1) {
-                printf("-\t");
-            } else {
-                printf("%d\t", frames[j]);
-            }
+        printf("%d\t", page);
+        for(int j=0; j<f; j++) {
+            printf("%d ", frames[j]);
         }
-
-        if (!page_found) {
-            printf("PF %d", page_faults);
-        }
-        printf("\n");
+        printf("\t%s\n", found ? "" : "Fault");
     }
 
-    printf("\nTotal number of page faults: %d\n", page_faults);
+    printf("\nTotal page faults: %d\n", faults);
     return 0;
 }
