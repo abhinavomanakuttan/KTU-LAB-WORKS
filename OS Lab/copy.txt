@@ -562,6 +562,224 @@ int main() {
 
 
 
+exp10 a (fifo)
+
+#include <stdio.h> 
+ 
+int main() { 
+    int i, j, k, f, pf = 0, count = 0, rs[25], m[10], n; 
+ 
+    printf("\n Enter the number of page references : "); 
+    scanf("%d", &n); 
+    printf("\n Enter the page references : "); 
+    for (i = 0; i < n; i++) 
+       scanf("%d", &rs[i]); 
+ 
+ 
+    printf("\n Enter number of frames : "); 
+    scanf("%d", &f); 
+ 
+    for (i = 0; i < f; i++) 
+        m[i] = -1;      // Initialize all frames as empty (-1) 
+ 
+    printf("\n FIFO Page Replacement \n"); 
+     
+    for (i = 0; i < n; i++) { 
+              // Check if page is already in memory 
+        for (k = 0; k < f; k++) { 
+            if (m[k] == rs[i]) 
+                break; 
+        } 
+ 
+              // If page not found, replace using FIFO 
+        if (k == f) { 
+            m[count] = rs[i];     // Replace at the FIFO position 
+            pf++;       // Increment page fault count 
+            count = (count + 1) % f;    // Move FIFO pointer circularly 
+        } 
+ 
+              // Print the current frame status 
+        for (j = 0; j < f; j++) 
+            printf("\t%d", m[j]); 
+ 
+        if (k == f) 
+            printf("\tPF No. %d", pf); 
+        printf("\n"); 
+    } 
+ 
+    printf("\nTotal number of page faults using FIFO is %d \n", pf); 
+    return 0; 
+} 
+
+
+Exp 10 b
+
+ 
+#include <stdio.h> 
+ 
+int main() { 
+    int i, j, min, rs[25], m[10], count[10], n, f, pf = 0, next = 1; 
+ 
+          // Taking input for the number of page references 
+    printf("Enter the number of page references: "); 
+    scanf("%d", &n); 
+          // Taking input for the page reference sequence 
+    printf("Enter the page references: "); 
+    for (i = 0; i < n; i++) { 
+        scanf("%d", &rs[i]); 
+    } 
+          // Taking input for the number of memory frames 
+    printf("Enter the number of frames: "); 
+    scanf("%d", &f); 
+ 
+          // Initializing memory frames and usage counters 
+    for (i = 0; i < f; i++) { 
+        m[i] = -1;          // Set all frames to -1 (indicating empty frames) 
+        count[i] = 0;       // Usage count for each frame, initially 0 
+    } 
+ 
+    printf("\nLRU Page Replacement\n"); 
+          // Processing each page reference 
+    for (i = 0; i < n; i++) { 
+        int found = 0;     // Flag to check if page is already in memory 
+ 
+              // Checking if the page is already in memory (Page Hit) 
+        for (j = 0; j < f; j++) { 
+            if (m[j] == rs[i]) {    // If page is found in memory 
+                found = 1;            // Mark as a hit 
+                count[j] = next++;    // Update usage count (higher means more recently used) 
+                break;                // No need to search further 
+            } 
+        } 
+              // If page is not found in memory, Page Fault occurs 
+ 
+
+ 
+        if (!found) { 
+            if (i < f) { 
+                   // If there is space in memory, insert page directly into an empty frame 
+                m[i] = rs[i]; 
+                count[i] = next++;    // Update usage count 
+            } else { 
+                // Find the Least Recently Used (LRU) page 
+                min = 0;      // Assume first frame is least recently used 
+                for (j = 1; j < f; j++) { 
+                    if (count[min] > count[j]) {  // If a frame is less recently used 
+                        min = j;     // Update index of least recently used frame 
+                    } 
+                } 
+ 
+                     // Replace the least recently used page with the new page 
+                m[min] = rs[i]; 
+                count[min] = next++;   // Update usage count 
+            } 
+ 
+            pf++;      // Increment page fault count 
+        } 
+            // Print the current state of memory frames (Empty frames shown as -1) 
+        for (j = 0; j < f; j++) { 
+            printf("%d\t", m[j]);    // Print the page number or -1 if empty 
+        } 
+              // Indicate page fault in output 
+        if (!found) 
+            printf("PF No. %d", pf); 
+ 
+        printf("\n"); 
+    } 
+          // Print the total number of page faults 
+    printf("\nTotal number of page faults using LRU: %d\n", pf); 
+    return 0; 
+}
 
 
 
+Exp 10 c
+
+#include <stdio.h> 
+ 
+int main() 
+{ 
+    int rs[50], i, j, k, m, f, cntr[20], min, pf = 0, found, m[20];  
+           // Step 1: Input the number of page references 
+    printf("\nEnter number of page references: "); 
+    scanf("%d", &m); 
+ 
+    printf("\nEnter the page references: "); 
+    for (i = 0; i < m; i++) 
+        scanf("%d", &rs[i]); 
+           // Step 2: Input number of frames 
+    printf("\nEnter the number of frames: "); 
+    scanf("%d", &f); 
+ 
+           // Step 3: Initialize memory and counter arrays 
+    for (i = 0; i < f; i++) 
+    { 
+        cntr[i] = 0;        // Frequency counter for each frame 
+        m[i] = -1;          // Empty frame marked as -1 
+    } 
+ 
+    printf("\n LFU Page Replacement \n"); 
+           // Step 4: Process each page reference 
+    for (i = 0; i < m; i++) 
+    { 
+        found = 0;      // Flag to check if page is already in memory 
+ 
+              // Step 5: Check if page is already in memory (Page Hit) 
+        for (j = 0; j < f; j++) 
+        { 
+            if (rs[i] == m[j])      // Page found in memory 
+            { 
+                cntr[j]++;       // Increase its usage count 
+                found = 1; 
+                break; 
+            } 
+        } 
+ 
+
+ 
+               // Step 6: If page is not in memory (Page Fault) 
+        if (!found) 
+        { 
+                  // Step 7: Check for an Empty Frame 
+            for (j = 0; j < f; j++) 
+            { 
+                if (m[j] == -1)      // Found an empty frame 
+                { 
+                    m[j] = rs[i];       // Assign page to empty frame 
+                    cntr[j] = 1;        // Reset counter for this page 
+                    pf++;               // Increment page fault counter 
+                    found = 1; 
+                    break; 
+                } 
+            } 
+        } 
+           // Step 8: If no empty frame, replace the Least Frequently Used (LFU) page 
+        if (!found) 
+        { 
+            min = 0; 
+               // Step 9: Find the page with the smallest count (Least Frequently Used) 
+            for (k = 1; k < f; k++) 
+            { 
+                if (cntr[k] < cntr[min]) 
+                    min = k; 
+            } 
+                 // Step 10: Replace LFU page with new page reference 
+            m[min] = rs[i]; 
+            cntr[min] = 1;     // Reset counter for the new page 
+            pf++;      // Increment page fault counter 
+        } 
+              // Step 11: Print memory state after each page reference 
+        printf("\n"); 
+        for (j = 0; j < f; j++) 
+            printf("\t%d", m[j]); 
+ 
+        if (!found) 
+            printf("\tPF No. %d", pf); 
+    } 
+          // Step 12: Print total number of page faults 
+ 
+ 
+ 
+    printf("\n\nTotal number of page faults: %d\n", pf); 
+    return 0; 
+} 
