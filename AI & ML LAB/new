@@ -1,1 +1,53 @@
 
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Load data
+data = pd.read_csv('data.csv')
+
+# Features and target
+X = data[['Height']]
+y = data['Weight']
+
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Predict on test set and calculate MSE
+y_test_pred = model.predict(X_test)
+mse = mean_squared_error(y_test, y_test_pred)
+
+# Print model parameters and MSE
+print(f"Model R^2 score on test set: {model.score(X_test, y_test):.2f}")
+print(f"Mean Squared Error on test set: {mse:.2f}")
+print(f"Model slope (coefficient): {model.coef_[0]:.4f}")
+print(f"Model intercept: {model.intercept_:.4f}")
+
+# User input for prediction
+height_input = float(input("Enter height to predict weight: "))
+predicted_weight = model.predict([[height_input]])
+print(f"Predicted weight for height {height_input} is {predicted_weight[0]:.2f}")
+
+# Plot data points
+plt.scatter(X, y, color='blue', label='Data points')
+
+# Plot regression line
+height_range = np.linspace(X.min(), X.max(), 100).reshape(-1, 1)
+predicted_weight_line = model.predict(height_range)
+plt.plot(height_range, predicted_weight_line, color='red', linewidth=2, label='Regression line')
+
+# Plot the predicted point from user input
+plt.scatter(height_input, predicted_weight, color='green', s=100, label='User Predicted Point', edgecolor='black')
+
+plt.xlabel('Height')
+plt.ylabel('Weight')
+plt.title('Height vs Weight Linear Regression')
+plt.legend()
+plt.show()
