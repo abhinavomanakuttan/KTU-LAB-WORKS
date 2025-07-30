@@ -1,0 +1,19 @@
+
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn import tree
+from sklearn.metrics import accuracy_score
+import matplotlib.pyplot as plt
+data = load_iris()
+X, y = data.data, data.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
+Dtree = tree.DecisionTreeClassifier().fit(X_train, y_train)
+pred = Dtree.predict(X_test)
+
+acc = accuracy_score(pred, y_test)
+print("Accuracy =", round(acc * 100, 4), "%")
+
+plt.figure(figsize=(15, 15)) # Resize figure
+tree.plot_tree(Dtree, filled=True)
+plt.title("Decision Tree Vizualization")
+plt.show()
