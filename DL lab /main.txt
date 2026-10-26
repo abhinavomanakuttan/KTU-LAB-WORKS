@@ -212,60 +212,125 @@ plt.show()
 Exp 4 
 
 
+import time
 import pandas as pd
+import tensorflow as tf
+
 from tensorflow.keras.datasets import cifar10
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Flatten, Dense, Dropout
+from tensorflow.keras.layers import Input, Flatten, Dense, Dropout
 from tensorflow.keras.regularizers import l2
 from tensorflow.keras.utils import to_categorical
 
-# Load and prepare data
-(x_train, y_train), (x_test, y_test) = cifar10.load_data()
-x_train, x_test = x_train / 255.0, x_test / 255.0
-y_train, y_test = to_categorical(y_train), to_categorical(y_test)
+# Reproducibility
+tf.keras.utils.set_random_seed(42)
 
-def build_model(init, dropout, reg):
-    model = Sequential([Flatten(input_shape=(32, 32, 3))])
+# 1. Load and prepare CIFAR-10 data
+(x_train, y_train), (x_test, y_test) = cifar10.load_data()
+
+x_train = x_train.astype("float32") / 255.0
+x_test = x_test.astype("float32") / 255.0
+
+y_train = to_categorical(y_train, num_classes=10)
+y_test = to_categorical(y_test, num_classes=10)
+
+
+# 2. Build the model
+def build_model(init, dropout=False, reg=None):
+    model = Sequential([
+        Input(shape=(32, 32, 3)),
+        Flatten()
+    ])
+
     for units in [512, 256, 64]:
-        model.add(Dense(units, activation="relu", kernel_initializer=init, kernel_regularizer=reg))
+        model.add(Dense(
+            units,
+            activation="relu",
+            kernel_initializer=init,
+            kernel_regularizer=reg
+        ))
+
         if dropout:
             model.add(Dropout(0.5))
-    model.add(Dense(10, activation="softmax", kernel_initializer=init))
+
+    model.add(Dense(
+        10,
+        activation="softmax",
+        kernel_initializer=init
+    ))
+
     return model
 
-# (name, initializer, dropout, regularizer, regularization label)
+
+# 3. Define experiments
 experiments = [
-    ("Baseline",          "glorot_uniform", False, None,       "None"),
-    ("Xavier",            "glorot_uniform", False, None,       "None"),
-    ("Kaiming",           "he_normal",      False, None,       "None"),
-    ("Dropout",           "glorot_uniform", True,  None,       "Dropout"),
-    ("L2 Regularization", "glorot_uniform", False, l2(0.001),  "L2"),
+    ("Baseline (Glorot Uniform)", "glorot_uniform", False, None),
+    ("Xavier Normal", "glorot_normal", False, None),
+    ("Kaiming (He Normal)", "he_normal", False, None),
+    ("Dropout", "glorot_uniform", True, None),
+    ("L2 Regularization", "glorot_uniform", False, l2(0.001)),
 ]
 
 results = []
 
-for name, init, dropout, reg, reg_label in experiments:
+# 4. Train and evaluate models
+for name, init, dropout, reg in experiments:
     for opt in ["Adam", "SGD"]:
+
+        print(f"\nTraining: {name} | Optimizer: {opt}")
+
         model = build_model(init, dropout, reg)
-        model.compile(optimizer=opt.lower(), loss="categorical_crossentropy", metrics=["accuracy"])
+
+        model.compile(
+            optimizer=opt.lower(),
+            loss="categorical_crossentropy",
+            metrics=["accuracy"]
+        )
 
         start = time.time()
-        model.fit(x_train, y_train, epochs=5, batch_size=64,
-                  validation_data=(x_test, y_test))
+
+        model.fit(
+            x_train,
+            y_train,
+            epochs=5,
+            batch_size=64,
+            validation_split=0.1,
+            verbose=1
+        )
+
         train_time = time.time() - start
 
-        loss, acc = model.evaluate(x_test, y_test, verbose=0)
-        results.append([name, opt, reg_label, loss, acc * 100, train_time])
+        # Evaluate only on the held-out test set
+        loss, acc = model.evaluate(
+            x_test, y_test, verbose=0
+        )
 
+        results.append([
+            name, opt, loss, acc * 100, train_time
+        ])
+
+        del model
+
+
+# 5. Display comparison
 results_df = pd.DataFrame(results, columns=[
-    "Model", "Optimizer", "Regularization",
-    "Test Loss", "Test Accuracy (%)"
+    "Model",
+    "Optimizer",
+    "Test Loss",
+    "Test Accuracy (%)",
+    "Training Time (s)"
 ])
 
 print("\n" + "=" * 100)
 print("FINAL COMPARISON")
 print("=" * 100)
 print(results_df.to_string(index=False))
+
+print("\nBest model by test accuracy:")
+print(
+    results_df.loc[results_df["Test Accuracy (%)"].idxmax()]
+)
+
 
 
 exp  5
