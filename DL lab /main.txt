@@ -1,1 +1,325 @@
 
+Exp 2 a 
+import cv2
+import matplotlib.pyplot as plt
+img = cv2.imread("jommuFLOWER.jpg")
+img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+equalized = cv2.equalizeHist(gray)
+
+plt.figure(figsize=(15, 10))
+plt.subplot(2, 3, 1)
+plt.imshow(img_rgb)
+plt.title("Original Colour Image")
+plt.axis("off")
+
+plt.subplot(2, 3, 2)
+plt.imshow(gray, cmap="gray")
+plt.title("Grayscale Image")
+plt.axis("off")
+
+plt.subplot(2, 3, 3)
+plt.hist(gray.ravel(), 256, [0, 256], color="black")
+plt.title("Histogram of Grayscale Image")
+plt.xlabel("Pixel Intensity")
+plt.ylabel("Frequency")
+
+
+plt.subplot(2, 3, 5)
+plt.imshow(equalized, cmap="gray")
+plt.title("Histogram Equalized Image")
+plt.axis("off")
+
+plt.subplot(2, 3, 4)
+plt.axis("off")
+
+plt.subplot(2, 3, 6)
+plt.hist(equalized.ravel(), 256, [0, 256], color="black")
+plt.title("Histogram of Equalized Image")
+
+plt.show()
+
+
+
+Exp 2b 
+import cv2
+import matplotlib.pyplot as plt
+img = cv2.imread("jommuFLOWER.jpg")
+img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
+opening = cv2.morphologyEx(gray, cv2.MORPH_OPEN, kernel)
+closing = cv2.morphologyEx(gray, cv2.MORPH_CLOSE, kernel)
+
+plt.figure(figsize=(12, 8))
+
+plt.subplot(2, 2, 1)
+plt.imshow(img_rgb)
+plt.title("Original Colour Image")
+plt.axis("off")
+
+plt.subplot(2, 2, 2)
+plt.imshow(gray, cmap="gray")
+plt.title("Grayscale Image")
+plt.axis("off")
+
+plt.subplot(2, 2, 3)
+plt.imshow(opening, cmap="gray")
+plt.title("Morphological Opening Image")
+plt.axis("off")
+
+plt.subplot(2, 2, 4)
+plt.imshow(closing, cmap="gray")
+plt.title("Morphological Closing Image")
+plt.axis("off")
+
+plt.show()
+
+
+
+Exp 3 
+
+import tensorflow as tf
+import numpy as np
+import matplotlib.pyplot as plt
+
+from tensorflow.keras.datasets import cifar10
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Flatten, Dense
+from tensorflow.keras.utils import to_categorical
+
+(x_train, y_train), (x_test, y_test) = cifar10.load_data()
+
+x_train = x_train / 255.0
+x_test = x_test / 255.0
+
+y_train = to_categorical(y_train, 10)
+y_test = to_categorical(y_test, 10)
+
+class_names = [
+    "Airplane",
+    "Automobile",
+    "Bird",
+    "Cat",
+    "Deer",
+    "Dog",
+    "Frog",
+    "Horse",
+    "Ship",
+    "Truck"
+]
+
+def create_model(hidden_units, activation):
+    model = Sequential([
+        Flatten(input_shape=(32, 32, 3)),
+        Dense(hidden_units[0], activation=activation),
+        Dense(hidden_units[1], activation=activation),
+        Dense(hidden_units[2], activation=activation),
+        Dense(10, activation="softmax")
+    ])
+
+    model.compile(
+        optimizer="adam",
+        loss="categorical_crossentropy",
+        metrics=["accuracy"]
+    )
+
+    return model
+
+hidden_units_list = [
+    (1024, 512, 256),
+    (512, 256, 128),
+    (256, 128, 64),
+    (128, 64, 32)
+]
+
+activation_list = [
+    "relu",
+    "tanh",
+    "sigmoid"
+]
+
+results = []
+
+best_acc = 0
+best_model = None
+best_config = None
+
+for units in hidden_units_list:
+    for act in activation_list:
+        model = create_model(units, act)
+        model.fit(x_train, y_train, epochs=5, batch_size=64, verbose=0)
+        loss, acc = model.evaluate(x_test, y_test, verbose=0)
+
+        results.append([*units, act, loss, acc * 100])
+
+        if acc > best_acc:
+            best_acc, best_model, best_config = acc, model, (units, act)
+
+print("=" * 70)
+print("MODEL COMPARISON")
+print("=" * 70)
+
+print(
+    f"{'Hidden Layer 1':>15}"
+    f"{'Hidden Layer 2':>15}"
+    f"{'Hidden Layer 3':>15}"
+    f"{'Activation':>12}"
+    f"{'Test Loss':>12}"
+    f"{'Test Accuracy (%)':>20}"
+)
+
+for result in results:
+    print(
+        f"{result[0]:>15}"
+        f"{result[1]:>15}"
+        f"{result[2]:>15}"
+        f"{result[3]:>12}"
+        f"{result[4]:>12.4f}"
+        f"{result[5]:>20.2f}"
+    )
+
+print()
+print("=" * 70)
+print("BEST MODEL")
+print("=" * 70)
+
+print("Hidden Units :", best_config[0])
+print("Activation   :", best_config[1])
+print("Accuracy     :", f"{best_acc * 100:.2f} %")
+
+plt.figure(figsize=(15, 6))
+
+for i in range(10):
+    prediction = best_model.predict(x_test[i].reshape(1, 32, 32, 3), verbose=0)
+    predicted_class = np.argmax(prediction)
+    actual_class = np.argmax(y_test[i])
+
+    plt.subplot(2, 5, i + 1)
+    plt.imshow(x_test[i])
+    plt.title(
+        f"Pred: {class_names[predicted_class]}\n"
+        f"Actual: {class_names[actual_class]}"
+    )
+    plt.axis("off")
+
+plt.tight_layout()
+plt.show()
+
+
+
+
+Exp 4 
+
+
+import pandas as pd
+from tensorflow.keras.datasets import cifar10
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Flatten, Dense, Dropout
+from tensorflow.keras.regularizers import l2
+from tensorflow.keras.utils import to_categorical
+
+# Load and prepare data
+(x_train, y_train), (x_test, y_test) = cifar10.load_data()
+x_train, x_test = x_train / 255.0, x_test / 255.0
+y_train, y_test = to_categorical(y_train), to_categorical(y_test)
+
+def build_model(init, dropout, reg):
+    model = Sequential([Flatten(input_shape=(32, 32, 3))])
+    for units in [512, 256, 64]:
+        model.add(Dense(units, activation="relu", kernel_initializer=init, kernel_regularizer=reg))
+        if dropout:
+            model.add(Dropout(0.5))
+    model.add(Dense(10, activation="softmax", kernel_initializer=init))
+    return model
+
+# (name, initializer, dropout, regularizer, regularization label)
+experiments = [
+    ("Baseline",          "glorot_uniform", False, None,       "None"),
+    ("Xavier",            "glorot_uniform", False, None,       "None"),
+    ("Kaiming",           "he_normal",      False, None,       "None"),
+    ("Dropout",           "glorot_uniform", True,  None,       "Dropout"),
+    ("L2 Regularization", "glorot_uniform", False, l2(0.001),  "L2"),
+]
+
+results = []
+
+for name, init, dropout, reg, reg_label in experiments:
+    for opt in ["Adam", "SGD"]:
+        model = build_model(init, dropout, reg)
+        model.compile(optimizer=opt.lower(), loss="categorical_crossentropy", metrics=["accuracy"])
+
+        start = time.time()
+        model.fit(x_train, y_train, epochs=5, batch_size=64,
+                  validation_data=(x_test, y_test))
+        train_time = time.time() - start
+
+        loss, acc = model.evaluate(x_test, y_test, verbose=0)
+        results.append([name, opt, reg_label, loss, acc * 100, train_time])
+
+results_df = pd.DataFrame(results, columns=[
+    "Model", "Optimizer", "Regularization",
+    "Test Loss", "Test Accuracy (%)"
+])
+
+print("\n" + "=" * 100)
+print("FINAL COMPARISON")
+print("=" * 100)
+print(results_df.to_string(index=False))
+
+
+exp  5
+import matplotlib.pyplot as plt
+from tensorflow.keras.datasets import mnist
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
+from tensorflow.keras.utils import to_categorical
+
+# Load and prepare data
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
+x_train = x_train.reshape(-1, 28, 28, 1) / 255.0
+x_test = x_test.reshape(-1, 28, 28, 1) / 255.0
+y_train, y_test = to_categorical(y_train), to_categorical(y_test)
+
+def build_model(extra_conv):
+    model = Sequential([
+        Conv2D(32, (3, 3), activation="relu", input_shape=(28, 28, 1)),
+        MaxPooling2D((2, 2))
+    ])
+    if extra_conv:
+        model.add(Conv2D(64, (3, 3), activation="relu"))
+        model.add(MaxPooling2D((2, 2)))
+    model.add(Flatten())
+    model.add(Dense(128, activation="relu"))
+    model.add(Dense(10, activation="softmax"))
+    return model
+
+# Model 1 has one conv layer, Model 2 has two
+for number, extra_conv in [(1, False), (2, True)]:
+    model = build_model(extra_conv)
+    model.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"])
+    model.fit(x_train, y_train, epochs=5, batch_size=64)
+
+    loss, accuracy = model.evaluate(x_test, y_test, verbose=0)
+    pred = model.predict(x_test[:2])
+
+    print("\n==============================")
+    print(f"MODEL {number} RESULTS")
+    print("==============================")
+    print("Accuracy:", accuracy * 100, "%")
+    print("Loss:", loss)
+
+    plt.figure(figsize=(12,6))
+for i in range(2):
+    one_hot=str(ytest[i].astype(int).tolist())
+    plt.subplot(1,2,i+1)
+    plt.imshow(xtest[i],cmap='gray')
+    plt.title(f"Predictecd:{pred[i].argmax()}\n"
+             f"Actual :{ytest[i].argmax()}\n"
+             f"One hot:{one_hot}")
+        plt.axis("off")
+
+    plt.suptitle(f"Model {number} Predictions")
+    plt.tight_layout()
+    plt.show()
+
