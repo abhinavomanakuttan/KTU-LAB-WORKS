@@ -388,3 +388,311 @@ for i in range(2):
     plt.tight_layout()
     plt.show()
 
+
+
+exp 8
+
+import numpy as np
+import tensorflow as tf
+from tensorflow.keras.datasets import imdb
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Embedding, SimpleRNN, Dense, Dropout
+
+# 1. Load IMDb dataset
+vocab_size = 10000
+max_length = 200
+
+(x_train, y_train), (x_test, y_test) = imdb.load_data(
+    num_words=vocab_size
+)
+
+print("Training samples:", len(x_train))
+print("Testing samples:", len(x_test))
+
+# 2. Pad sequences to equal length
+x_train = pad_sequences(
+    x_train, maxlen=max_length, padding="post", truncating="post"
+)
+
+x_test = pad_sequences(
+    x_test, maxlen=max_length, padding="post", truncating="post"
+)
+
+# 3. Build the RNN model
+model = Sequential([
+    Embedding(vocab_size, 32),
+    SimpleRNN(32, activation="tanh"),
+    Dropout(0.3),
+    Dense(1, activation="sigmoid")
+])
+
+# 4. Compile the model
+model.compile(
+    optimizer="adam",
+    loss="binary_crossentropy",
+    metrics=["accuracy"]
+)
+
+model.summary()
+
+# 5. Train the model
+history = model.fit(
+    x_train,
+    y_train,
+    epochs=6,
+    batch_size=64,
+    validation_split=0.2,
+    verbose=1
+)
+
+# 6. Evaluate the model
+test_loss, test_accuracy = model.evaluate(
+    x_test, y_test, verbose=1
+)
+
+print("\nTest Loss:", test_loss)
+print("Test Accuracy:", test_accuracy)
+
+# 7. Predict sentiment for a new review
+word_index = imdb.get_word_index()
+
+def preprocess_review(review):
+    words = review.lower().split()
+    sequence = [1]  # IMDb sequence start token
+
+    for word in words:
+        # Map unknown words to the unknown token
+        index = word_index.get(word, 2) + 3
+
+        if index >= vocab_size:
+            index = 2
+
+        sequence.append(index)
+
+    sequence = pad_sequences(
+        [sequence],
+        maxlen=max_length,
+        padding="post",
+        truncating="post"
+    )
+
+    return sequence
+
+review = (
+    "This movie was amazing, the acting was excellent "
+    "and I really enjoyed watching it"
+)
+
+processed_review = preprocess_review(review)
+prediction = model.predict(processed_review, verbose=0)[0][0]
+
+print("\nReview:", review)
+print("Prediction Score:", prediction)
+
+if prediction >= 0.5:
+    print("Predicted Sentiment: Positive")
+else:
+    print("Predicted Sentiment: Negative")
+
+
+
+Experiment 6: MNIST Classification using a Vision CNN,
+
+
+import time
+import tensorflow as tf
+import matplotlib.pyplot as plt
+import numpy as np
+
+from tensorflow.keras.datasets import mnist
+from tensorflow.keras.applications import MobileNetV2
+from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
+from tensorflow.keras.layers import Input, GlobalAveragePooling2D, Dense, Dropout
+from tensorflow.keras.models import Model
+
+# --------------------------------------------------
+# 1. Load and preprocess MNIST dataset
+# --------------------------------------------------
+
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
+
+# Split training data into training and validation sets
+x_val = x_train[55000:]
+y_val = y_train[55000:]
+
+x_train = x_train[:55000]
+y_train = y_train[:55000]
+
+# Convert grayscale images to 3-channel images
+def preprocess_image(image, label):
+    image = tf.cast(image, tf.float32)
+    image = image[..., tf.newaxis]
+    image = tf.image.grayscale_to_rgb(image)
+    image = tf.image.resize(image, (64, 64))
+    image = preprocess_input(image)
+    return image, label
+
+def create_dataset(images, labels, training=False):
+    dataset = tf.data.Dataset.from_tensor_slices((images, labels))
+    if training:
+        dataset = dataset.shuffle(10000)
+    dataset = dataset.map(
+        preprocess_image,
+        num_parallel_calls=tf.data.AUTOTUNE
+    )
+    dataset = dataset.batch(128).prefetch(tf.data.AUTOTUNE)
+    return dataset
+
+train_ds = create_dataset(x_train, y_train, True)
+val_ds = create_dataset(x_val, y_val)
+test_ds = create_dataset(x_test, y_test)
+
+# --------------------------------------------------
+# 2. Load pretrained CNN model
+# --------------------------------------------------
+
+base_model = MobileNetV2(
+    weights="imagenet",
+    include_top=False,
+    input_shape=(64, 64, 3)
+)
+
+# Build classification model
+inputs = Input(shape=(64, 64, 3))
+x = base_model(inputs, training=False)
+x = GlobalAveragePooling2D()(x)
+x = Dropout(0.2)(x)
+outputs = Dense(10, activation="softmax")(x)
+
+model = Model(inputs, outputs)
+
+# --------------------------------------------------
+# 3. Fixed Feature Extraction
+# --------------------------------------------------
+
+base_model.trainable = False
+
+model.compile(
+    optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
+    loss="sparse_categorical_crossentropy",
+    metrics=["accuracy"]
+)
+
+start_time = time.time()
+
+history_fixed = model.fit(
+    train_ds,
+    validation_data=val_ds,
+    epochs=4
+)
+
+fixed_time = time.time() - start_time
+
+fixed_loss, fixed_accuracy = model.evaluate(test_ds, verbose=0)
+
+# --------------------------------------------------
+# 4. Fine-Tuning
+# --------------------------------------------------
+
+# Unfreeze the last layers of the pretrained CNN
+base_model.trainable = True
+
+for layer in base_model.layers[:-30]:
+    layer.trainable = False
+
+# Keep batch normalization layers frozen for stability
+for layer in base_model.layers:
+    if isinstance(layer, tf.keras.layers.BatchNormalization):
+        layer.trainable = False
+
+model.compile(
+    optimizer=tf.keras.optimizers.Adam(learning_rate=0.00001),
+    loss="sparse_categorical_crossentropy",
+    metrics=["accuracy"]
+)
+
+start_time = time.time()
+
+history_fine = model.fit(
+    train_ds,
+    validation_data=val_ds,
+    epochs=4
+)
+
+fine_time = time.time() - start_time
+
+fine_loss, fine_accuracy = model.evaluate(test_ds, verbose=0)
+
+# --------------------------------------------------
+# 5. Display Results
+# --------------------------------------------------
+
+print("\n========== FINAL RESULTS ==========")
+
+print(f"Fixed Feature Extraction Accuracy: {fixed_accuracy * 100:.2f}%")
+print(f"Fixed Feature Extraction Loss:     {fixed_loss:.4f}")
+print(f"Fixed Feature Extraction Time:     {fixed_time:.2f} seconds")
+
+print(f"\nFine-Tuning Accuracy:              {fine_accuracy * 100:.2f}%")
+print(f"Fine-Tuning Loss:                  {fine_loss:.4f}")
+print(f"Fine-Tuning Time:                  {fine_time:.2f} seconds")
+
+print("\n========== PERFORMANCE COMPARISON ==========")
+
+print(f"Accuracy Improvement: {(fine_accuracy - fixed_accuracy) * 100:.2f}%")
+print(f"Loss Difference:      {fixed_loss - fine_loss:.4f}")
+
+# --------------------------------------------------
+# 6. Plot Accuracy and Loss Graphs
+# --------------------------------------------------
+
+fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+
+# Fixed Feature Extraction - Accuracy
+axes[0, 0].plot(history_fixed.history["accuracy"], marker="o",
+                label="Training Accuracy")
+axes[0, 0].plot(history_fixed.history["val_accuracy"], marker="o",
+                label="Validation Accuracy")
+axes[0, 0].set_title("Fixed Feature Extraction - Accuracy")
+axes[0, 0].set_xlabel("Epoch")
+axes[0, 0].set_ylabel("Accuracy")
+axes[0, 0].legend()
+axes[0, 0].grid(True)
+
+# Fixed Feature Extraction - Loss
+axes[0, 1].plot(history_fixed.history["loss"], marker="o",
+                label="Training Loss")
+axes[0, 1].plot(history_fixed.history["val_loss"], marker="o",
+                label="Validation Loss")
+axes[0, 1].set_title("Fixed Feature Extraction - Loss")
+axes[0, 1].set_xlabel("Epoch")
+axes[0, 1].set_ylabel("Loss")
+axes[0, 1].legend()
+axes[0, 1].grid(True)
+
+# Fine-Tuning - Accuracy
+axes[1, 0].plot(history_fine.history["accuracy"], marker="o",
+                label="Training Accuracy")
+axes[1, 0].plot(history_fine.history["val_accuracy"], marker="o",
+                label="Validation Accuracy")
+axes[1, 0].set_title("Fine-Tuning - Accuracy")
+axes[1, 0].set_xlabel("Epoch")
+axes[1, 0].set_ylabel("Accuracy")
+axes[1, 0].legend()
+axes[1, 0].grid(True)
+
+# Fine-Tuning - Loss
+axes[1, 1].plot(history_fine.history["loss"], marker="o",
+                label="Training Loss")
+axes[1, 1].plot(history_fine.history["val_loss"], marker="o",
+                label="Validation Loss")
+axes[1, 1].set_title("Fine-Tuning - Loss")
+axes[1, 1].set_xlabel("Epoch")
+axes[1, 1].set_ylabel("Loss")
+axes[1, 1].legend()
+axes[1, 1].grid(True)
+
+plt.tight_layout()
+plt.show()
+
