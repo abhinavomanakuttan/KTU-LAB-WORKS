@@ -288,3 +288,133 @@ else:
 
 
 
+Exp 7 
+
+
+# 2. IMPORT LIBRARIES
+import yfinance as yf
+import numpy as np
+import matplotlib.pyplot as plt
+
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.metrics import mean_absolute_error
+
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+
+
+# 3. DOWNLOAD NIFTY-50 DATA
+data = yf.download(
+    "^NSEI",
+    period="5y",
+    progress=False
+)
+
+if data.columns.nlevels > 1:
+    data.columns = data.columns.get_level_values(0)
+
+data = data[['Open', 'High', 'Low', 'Close']].dropna()
+
+print(data.head())
+
+
+# 4. CREATE TARGET
+data['Target'] = data['Close'].shift(-1)
+
+data = data.dropna()
+
+X = data[['Open', 'High', 'Low', 'Close']].values
+y = data[['Target']].values
+
+
+# 5. SPLIT DATASET
+split = int(len(X) * 0.8)
+
+X_train = X[:split]
+X_test = X[split:]
+
+y_train = y[:split]
+y_test = y[split:]
+
+
+# 6. NORMALIZE DATA
+sx = MinMaxScaler()
+sy = MinMaxScaler()
+
+X_train = sx.fit_transform(X_train)
+X_test = sx.transform(X_test)
+
+y_train = sy.fit_transform(y_train)
+y_test = sy.transform(y_test)
+
+
+# 7. BUILD ANN MODEL
+model = Sequential([
+    Dense(64, activation='relu', input_shape=(4,)),
+    Dense(32, activation='relu'),
+    Dense(1)
+])
+
+
+# 8. COMPILE MODEL
+model.compile(
+    optimizer='adam',
+    loss='mse'
+)
+
+
+# 9. TRAIN MODEL
+model.fit(
+    X_train,
+    y_train,
+    epochs=30,
+    batch_size=32,
+    verbose=1
+)
+
+
+# 10. PREDICT AND EVALUATE
+pred = model.predict(X_test, verbose=0)
+
+pred = sy.inverse_transform(pred)
+actual = sy.inverse_transform(y_test)
+
+mae = mean_absolute_error(actual, pred)
+
+print("Mean Absolute Error:", mae)
+
+
+# 11. PLOT ACTUAL VS PREDICTED
+plt.figure(figsize=(12, 5))
+
+plt.plot(actual, label='Actual')
+plt.plot(pred, label='Predicted')
+
+plt.title('NIFTY-50 Price Prediction')
+plt.xlabel('Trading Days')
+plt.ylabel('Closing Price')
+
+plt.legend()
+plt.show()
+
+
+# 12. PREDICT NEXT TRADING DAY
+latest = sx.transform(
+    X[-1].reshape(1, -1)
+)
+
+next_price_scaled = model.predict(
+    latest,
+    verbose=0
+)
+
+next_price = sy.inverse_transform(
+    next_price_scaled
+)
+
+print(
+    "Predicted next closing price:",
+    round(float(next_price[0, 0]), 2)
+)
+
+
