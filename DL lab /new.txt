@@ -1,0 +1,290 @@
+Exp 8 
+
+
+# 1. IMPORT LIBRARIES
+
+import numpy as np
+from tensorflow.keras.datasets import imdb
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Embedding, SimpleRNN, Dense
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+
+vocab_size = 10000
+max_length = 200
+
+# 2. LOAD IMDB DATASET
+
+(x_train, y_train), (x_test, y_test) = imdb.load_data(
+    num_words=vocab_size
+)
+
+print("Training samples:", len(x_train))
+print("Testing samples:", len(x_test))
+
+# 3. PAD SEQUENCES
+
+x_train = pad_sequences(
+    x_train,
+    maxlen=max_length
+)
+
+x_test = pad_sequences(
+    x_test,
+    maxlen=max_length
+)
+
+print("Training data shape:", x_train.shape)
+print("Testing data shape:", x_test.shape)
+
+# 4. BUILD RNN MODEL
+
+model = Sequential()
+
+model.add(Embedding(
+    input_dim=vocab_size,
+    output_dim=32
+))
+
+model.add(SimpleRNN(32))
+
+model.add(Dense(1, activation='sigmoid'))
+
+# 5. COMPILE MODEL
+
+model.compile(
+    optimizer='adam',
+    loss='binary_crossentropy',
+    metrics=['accuracy']
+)
+
+# 6. DISPLAY MODEL
+
+model.summary()
+
+# 7. TRAIN MODEL
+
+history = model.fit(
+    x_train,
+    y_train,
+    epochs=5,
+    batch_size=64,
+    verbose=1
+)
+
+# 8. EVALUATE MODEL
+
+test_loss, test_accuracy = model.evaluate(
+    x_test,
+    y_test,
+    batch_size=32,
+    verbose=1
+)
+
+print("\nTest Loss:", test_loss)
+print("Test Accuracy:", test_accuracy)
+
+# 9. PREDICT A MOVIE REVIEW
+
+sample_review = x_test[0]
+
+prediction = model.predict(
+    np.expand_dims(sample_review, axis=0),
+    verbose=1
+)
+
+prediction_value = prediction[0][0]
+
+# 10. DISPLAY PREDICTION
+
+print("\nPrediction:", prediction_value)
+
+if prediction_value >= 0.5:
+    print("Review: Positive")
+else:
+    print("Review: Negative")
+
+
+Exp 8 with dataset given 
+
+
+
+# 1. IMPORT LIBRARIES
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from sklearn.model_selection import train_test_split
+
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Embedding, SimpleRNN, Dense
+from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+
+
+# 2. LOAD DATASET
+
+df = pd.read_csv("movie_reviews.csv")
+
+print(df.head())
+
+print("Dataset shape:", df.shape)
+
+
+# 3. PREPROCESS DATASET
+
+df = df.dropna(subset=['review', 'sentiment'])
+
+X = df['review'].astype(str)
+
+y = df['sentiment'].str.lower().map({
+    'positive': 1,
+    'negative': 0
+})
+
+# Remove invalid labels
+
+valid = y.notna()
+
+X = X[valid]
+y = y[valid].astype(int)
+
+print("Total reviews:", len(X))
+
+
+# 4. SPLIT DATASET
+
+x_train_text, x_test_text, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42,
+    stratify=y
+)
+
+print("Training samples:", len(x_train_text))
+print("Testing samples:", len(x_test_text))
+
+
+# 5. TOKENIZATION
+
+vocab_size = 10000
+max_length = 200
+
+tokenizer = Tokenizer(
+    num_words=vocab_size,
+    oov_token="<OOV>"
+)
+
+tokenizer.fit_on_texts(x_train_text)
+
+x_train = tokenizer.texts_to_sequences(x_train_text)
+
+x_test = tokenizer.texts_to_sequences(x_test_text)
+
+
+# 6. PAD SEQUENCES
+
+x_train = pad_sequences(
+    x_train,
+    maxlen=max_length,
+    padding='post',
+    truncating='post'
+)
+
+x_test = pad_sequences(
+    x_test,
+    maxlen=max_length,
+    padding='post',
+    truncating='post'
+)
+
+print("Training data shape:", x_train.shape)
+print("Testing data shape:", x_test.shape)
+
+
+# 7. BUILD RNN MODEL
+
+model = Sequential()
+
+model.add(Embedding(
+    input_dim=vocab_size,
+    output_dim=32
+))
+
+model.add(SimpleRNN(32))
+
+model.add(Dense(1, activation='sigmoid'))
+
+
+# 8. COMPILE MODEL
+
+model.compile(
+    optimizer='adam',
+    loss='binary_crossentropy',
+    metrics=['accuracy']
+)
+
+
+# 9. DISPLAY MODEL
+
+model.summary()
+
+
+# 10. TRAIN MODEL
+
+history = model.fit(
+    x_train,
+    y_train,
+    epochs=5,
+    batch_size=64,
+    validation_split=0.2,
+    verbose=1
+)
+
+
+# 11. EVALUATE MODEL
+
+test_loss, test_accuracy = model.evaluate(
+    x_test,
+    y_test,
+    batch_size=32,
+    verbose=1
+)
+
+print("\nTest Loss:", test_loss)
+print("Test Accuracy:", test_accuracy)
+
+
+
+
+# 13. PREDICT A NEW MOVIE REVIEW
+
+review = ["This movie was amazing and the acting was excellent"]
+
+sequence = tokenizer.texts_to_sequences(review)
+
+padded_review = pad_sequences(
+    sequence,
+    maxlen=max_length,
+    padding='post',
+    truncating='post'
+)
+
+prediction = model.predict(padded_review, verbose=0)
+
+prediction_value = prediction[0][0]
+
+
+# 14. DISPLAY PREDICTION
+
+print("\nPrediction:", prediction_value)
+
+if prediction_value >= 0.5:
+    print("Review: Positive")
+else:
+    print("Review: Negative")
+
+
+
+
